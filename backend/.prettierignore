@@ -1,0 +1,6 @@
+# Ignorar artefatos de build
+dist
+node_modules
+coverage
+.env
+.gitignore
