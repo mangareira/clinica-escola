@@ -1,4 +1,4 @@
-import { User } from 'src/generated/prisma/client';
+import { User } from 'src/module/users/entity/users.entity';
 import { LoginDto } from '../dto/login.dto';
 
 export abstract class ILoginRepository {

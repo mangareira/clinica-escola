@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { ILoginRepository } from '../login.repository';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { LoginDto } from '../../dto/login.dto';
-import { User } from 'src/generated/prisma/client';
+import { User } from 'src/module/users/entity/users.entity';
 
 @Injectable()
 export class LoginPrismaRepository implements ILoginRepository {
