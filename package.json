@@ -13,6 +13,7 @@
     "build": "npm --workspace backend run build && npm --workspace frontend run build"
   },
   "dependencies": {
+    "@nestjs/jwt": "^11.0.2",
     "typescript": "^5.7.3"
   }
 }

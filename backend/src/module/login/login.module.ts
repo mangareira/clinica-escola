@@ -2,8 +2,8 @@ import { Module } from '@nestjs/common';
 import { LoginService } from './login.service';
 import { LoginController } from './login.controller';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { ILoginRepository } from './repository/login.repository';
-import { LoginPrismaRepository } from './repository/prisma/prisma.repository';
+import { UserPrismaRepository } from '../users/repository/prisma/prisma.repository';
+import { IUserRepository } from '../users/repository/users.respository';
 
 @Module({
   controllers: [LoginController],
@@ -11,8 +11,8 @@ import { LoginPrismaRepository } from './repository/prisma/prisma.repository';
     LoginService,
     PrismaService,
     {
-      provide: ILoginRepository,
-      useClass: LoginPrismaRepository,
+      useClass: UserPrismaRepository,
+      provide: IUserRepository,
     },
   ],
 })

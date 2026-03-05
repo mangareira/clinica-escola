@@ -19,13 +19,10 @@ export class UserPrismaRepository implements IUserRepository {
     return user;
   }
 
-  async findByUserNamer(username: string): Promise<Omit<User, 'password'> | null> {
+  async findByUserNamer(username: string): Promise<User | null> {
     const user = this.prisma.user.findUnique({
       where: {
         username,
-      },
-      omit: {
-        password: true,
       },
     });
 
