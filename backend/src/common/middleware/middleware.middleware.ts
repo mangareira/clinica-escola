@@ -1,6 +1,7 @@
 import { Injectable, NestMiddleware, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { NextFunction, Request, Response } from 'express';
+import { UserPayload } from 'src/interfaces/user-payload.interface';
 
 @Injectable()
 export class Middleware implements NestMiddleware {
@@ -20,7 +21,9 @@ export class Middleware implements NestMiddleware {
 
       if (!token) throw new UnauthorizedException();
 
-      await this.jwtService.verifyAsync(token);
+      const payload = await this.jwtService.verifyAsync<UserPayload>(token);
+
+      req.user = payload;
 
       next();
     } catch (error) {
