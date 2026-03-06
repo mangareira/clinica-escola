@@ -1,19 +1,21 @@
 import api from "@/lib/axios"
 import { Login } from "@/utils/schemas/login.schemas"
 import { useMutation } from "@tanstack/react-query"
+import axios from "axios"
 import { toast } from "sonner"
 
 export const useLogin = () => {
   const mutation = useMutation<void, Error, Login>({
     mutationFn: async (json) => {
-      const res = await api.post("/login", json)
-      if(res.status === 400) throw new Error("Error ao fazer o login") 
+      await api.post("/login", json)
     },
     onSuccess: () => {
       toast.success("Login realizado com sucesso")
     },
-    onError: () => {
-      toast.error("Falha ao fazer o login")
+    onError: (error) => {
+      if(axios.isAxiosError(error)) {
+        toast.error(error.response?.data?.message)
+      }
     }
   })
 

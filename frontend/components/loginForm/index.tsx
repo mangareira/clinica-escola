@@ -15,6 +15,7 @@ import { Input } from '../ui/input';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Login, loginSchema} from '@/utils/schemas/login.schemas';
 import { useLogin } from '@/utils/hooks/login/useLogin';
+import { useRouter } from 'next/navigation';
 
 export const LoginForm = () => {
   const form = useForm<Login>({
@@ -22,12 +23,14 @@ export const LoginForm = () => {
     defaultValues: { username: '', password: '' },
   });
 
+  const router = useRouter()
+
   const { mutate, isPending } = useLogin()
 
   const onSubmit = (values: Login) => {
     mutate(values, {
       onSuccess: () => {
-        
+        router.push('/')
       }
     })
   };
