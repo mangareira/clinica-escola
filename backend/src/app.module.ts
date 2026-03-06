@@ -1,8 +1,10 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { LoginModule } from './module/login/login.module';
 import { UsersModule } from './module/users/users.module';
 import { JwtModule } from '@nestjs/jwt';
 import 'dotenv/config';
+import { Middleware } from './common/middleware/middleware.middleware';
+import { UsersController } from './module/users/users.controller';
 
 @Module({
   imports: [
@@ -22,4 +24,8 @@ import 'dotenv/config';
     }),
   ],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(Middleware).forRoutes(UsersController);
+  }
+}
