@@ -19,7 +19,7 @@ import { useLogin } from '@/utils/hooks/login/useLogin';
 export const LoginForm = () => {
   const form = useForm<Login>({
     resolver: zodResolver(loginSchema),
-    defaultValues: { name: '', password: '' },
+    defaultValues: { username: '', password: '' },
   });
 
   const { mutate, isPending } = useLogin()
@@ -36,7 +36,7 @@ export const LoginForm = () => {
     <Form {...form}>
       <form className="space-y-4" onSubmit={form.handleSubmit(onSubmit)}>
         <FormField
-          name="name"
+          name="username"
           control={form.control}
           render={({ field }) => (
             <FormItem>

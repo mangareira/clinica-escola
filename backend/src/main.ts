@@ -7,7 +7,13 @@ import 'dotenv/config';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.useGlobalFilters(new ZodFilter());
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+  app.enableCors({
+    origin: ['http://localhost:3001', '*'],
+    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+    credentials: true,
+    exposedHeaders: ['Set-Cookie'],
+  });
   app.use(cookieParser(process.env.SECRET_KEY));
 
   await app.listen(process.env.PORT ?? 3000, '0.0.0.0');

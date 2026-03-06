@@ -14,13 +14,11 @@ export class RolesGuard implements CanActivate {
   constructor(private reflector: Reflector) {}
 
   canActivate(context: ExecutionContext): boolean {
-    // Obtém as roles exigidas para a rota (via decorator @Roles)
     const requiredRoles = this.reflector.getAllAndOverride<string[]>(ROLES_KEY, [
       context.getHandler(),
       context.getClass(),
     ]);
 
-    // Se não houver roles exigidas, permite o acesso (apenas autenticado)
     if (!requiredRoles) {
       return true;
     }
@@ -32,7 +30,6 @@ export class RolesGuard implements CanActivate {
       throw new UnauthorizedException('Usuário não autenticado');
     }
 
-    // Verifica se a role do usuário está entre as permitidas
     const hasRole = requiredRoles.includes(user.role);
     if (!hasRole) {
       throw new ForbiddenException('Acesso negado: role insuficiente');
