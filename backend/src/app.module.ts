@@ -1,4 +1,4 @@
-import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule, RequestMethod } from '@nestjs/common';
 import { LoginModule } from './module/login/login.module';
 import { UsersModule } from './module/users/users.module';
 import { JwtModule } from '@nestjs/jwt';
@@ -26,6 +26,9 @@ import { UsersController } from './module/users/users.controller';
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer.apply(Middleware).forRoutes(UsersController);
+    consumer.apply(Middleware).forRoutes(UsersController, {
+      path: '/login/verify',
+      method: RequestMethod.GET,
+    });
   }
 }

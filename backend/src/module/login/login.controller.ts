@@ -1,8 +1,8 @@
-import { Controller, Post, Body, UsePipes, Res } from '@nestjs/common';
+import { Controller, Post, Body, UsePipes, Res, Get, Req } from '@nestjs/common';
 import { LoginService } from './login.service';
 import { LoginDto, loginSchema } from './dto/login.dto';
 import { ZodPipe } from 'src/common/pipes/zod/zod.pipe';
-import { Response } from 'express';
+import { Request, Response } from 'express';
 
 @Controller('login')
 export class LoginController {
@@ -18,6 +18,18 @@ export class LoginController {
     res.status(200);
 
     return result;
+  }
+
+  @Get('verify')
+  verify(@Req() req: Request) {
+    const user = req.user;
+    return {
+      message: 'Autenticado',
+      user: {
+        id: user?.sub.user_id,
+        role: user?.sub.role,
+      },
+    };
   }
 
   private makeCookie(res: Response, result: { access_token: string; refresh_token: string }) {
