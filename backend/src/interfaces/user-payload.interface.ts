@@ -1,4 +1,6 @@
 export interface UserPayload {
-  sub: string;
-  role: 'User' | 'Admin';
+  sub: {
+    user_id: string;
+    role: 'User' | 'Admin';
+  };
 }

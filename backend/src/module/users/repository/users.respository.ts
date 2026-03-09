@@ -4,4 +4,5 @@ import { User } from '../entity/users.entity';
 export abstract class IUserRepository {
   abstract create(createUser: CreateUserDto): Promise<Omit<User, 'password'> | null>;
   abstract findByUserNamer(username: string): Promise<User | null>;
+  abstract findById(userId: string): Promise<User | null>;
 }

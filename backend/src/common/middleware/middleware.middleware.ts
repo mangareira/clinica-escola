@@ -1,6 +1,7 @@
 import { Injectable, NestMiddleware, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { NextFunction, Request, Response } from 'express';
+import { JwtError } from 'src/@types/jwtError';
 import { UserPayload } from 'src/interfaces/user-payload.interface';
 import { LoginService } from 'src/module/login/login.service';
 
@@ -28,10 +29,11 @@ export class Middleware implements NestMiddleware {
         const payload = await this.jwtService.verifyAsync<UserPayload>(token);
         req.user = payload;
         return next();
-      } catch (err) {
-        if (err === 'TokenExpiredError') {
+      } catch (error) {
+        const err = error as JwtError;
+        if (err.name === 'TokenExpiredError') {
           // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-          const refreshToken: string = req.cookies['refresh_token'];
+          const refreshToken: string = req.signedCookies['refresh_token'];
           if (!refreshToken) throw new UnauthorizedException();
 
           const newTokens = await this.loginService.refreshToken(refreshToken);
@@ -52,6 +54,7 @@ export class Middleware implements NestMiddleware {
           });
 
           const payload = await this.jwtService.verifyAsync<UserPayload>(newTokens.access_token);
+
           req.user = payload;
           return next();
         } else {
