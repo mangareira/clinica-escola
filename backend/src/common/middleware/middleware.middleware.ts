@@ -16,14 +16,45 @@ export class Middleware implements NestMiddleware {
     try {
       // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       let token: string = req.cookies['access_token'];
-
       if (!token && req.headers.authorization) {
         const authHeader = req.headers.authorization;
         if (authHeader.startsWith('Bearer ')) {
           token = authHeader.split(' ')[1];
         }
       }
-      if (!token) throw new UnauthorizedException();
+
+      if (!token) {
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+        const refreshToken: string | undefined = req.signedCookies['refresh_token'];
+        if (!refreshToken) {
+          throw new UnauthorizedException('Nenhum token de acesso ou refresh fornecido');
+        }
+
+        try {
+          const newTokens = await this.loginService.refreshToken(refreshToken);
+          res.cookie('access_token', newTokens.access_token, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: 'lax',
+            maxAge: 3600000,
+            path: '/',
+          });
+          res.cookie('refresh_token', newTokens.refresh_token, {
+            signed: true,
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: 'lax',
+            maxAge: 7 * 24 * 60 * 60 * 1000,
+            path: '/',
+          });
+
+          const payload = await this.jwtService.verifyAsync<UserPayload>(newTokens.access_token);
+          req.user = payload;
+          return next();
+        } catch {
+          throw new UnauthorizedException('Refresh token inválido ou expirado');
+        }
+      }
 
       try {
         const payload = await this.jwtService.verifyAsync<UserPayload>(token);
@@ -33,8 +64,12 @@ export class Middleware implements NestMiddleware {
         const err = error as JwtError;
         if (err.name === 'TokenExpiredError') {
           // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-          const refreshToken: string = req.signedCookies['refresh_token'];
-          if (!refreshToken) throw new UnauthorizedException();
+          const refreshToken: string | undefined = req.signedCookies['refresh_token'];
+          if (!refreshToken) {
+            throw new UnauthorizedException(
+              'Access token expirado e nenhum refresh token fornecido',
+            );
+          }
 
           const newTokens = await this.loginService.refreshToken(refreshToken);
           res.cookie('access_token', newTokens.access_token, {
@@ -54,15 +89,14 @@ export class Middleware implements NestMiddleware {
           });
 
           const payload = await this.jwtService.verifyAsync<UserPayload>(newTokens.access_token);
-
           req.user = payload;
           return next();
         } else {
-          throw new UnauthorizedException();
+          throw new UnauthorizedException('Token inválido');
         }
       }
     } catch {
-      throw new UnauthorizedException();
+      throw new UnauthorizedException('Falha na autenticação');
     }
   }
 }
