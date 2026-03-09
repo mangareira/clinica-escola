@@ -15,5 +15,6 @@ import { IUserRepository } from '../users/repository/users.respository';
       provide: IUserRepository,
     },
   ],
+  exports: [LoginService],
 })
 export class LoginModule {}

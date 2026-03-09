@@ -1,8 +1,9 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable, UnauthorizedException } from '@nestjs/common';
 import { LoginDto } from './dto/login.dto';
 import { IUserRepository } from '../users/repository/users.respository';
 import { JwtService } from '@nestjs/jwt';
 import { verify } from 'argon2';
+import { UserPayload } from 'src/interfaces/user-payload.interface';
 
 @Injectable()
 export class LoginService {
@@ -40,5 +41,40 @@ export class LoginService {
       access_token,
       refresh_token,
     };
+  }
+
+  async refreshToken(refreshToken: string) {
+    try {
+      const verifyToken = await this.jwtService.verifyAsync<UserPayload>(refreshToken);
+
+      const isExists = await this.userRepository.findByUserNamer(verifyToken.sub);
+
+      if (!isExists) throw new UnauthorizedException('Usuário não existe');
+
+      const access_token = await this.jwtService.signAsync({
+        sub: {
+          user_id: isExists.id,
+          role: isExists.role,
+        },
+      });
+      const refresh_token = await this.jwtService.signAsync(
+        {
+          sub: {
+            user_id: isExists.id,
+            role: isExists.role,
+          },
+        },
+        { expiresIn: '7d' },
+      );
+
+      return {
+        access_token,
+        refresh_token,
+      };
+    } catch (err) {
+      const message = err === 'TokenExpiredError' ? 'Token expirado' : 'Token inválido';
+
+      throw new UnauthorizedException(message);
+    }
   }
 }
