@@ -18,7 +18,9 @@ export async function proxy(request: NextRequest) {
       },
     });
 
-    const isAuthenticated = (await response.json()).message === 'Autenticado';
+    const data = await response.json()
+
+    const isAuthenticated = data.message === 'Autenticado';
 
     if (isLoginPage) {
       if (isAuthenticated) {
@@ -29,6 +31,9 @@ export async function proxy(request: NextRequest) {
 
     if (isAuthenticated) {
       const nextResponse = NextResponse.next();
+
+      nextResponse.headers.set('x-user-role', data.user.role);
+      nextResponse.headers.set('x-user-id', data.user.id);
 
       const setCookieHeaders = response.headers.getSetCookie
         ? response.headers.getSetCookie()
