@@ -14,7 +14,6 @@ import { UsersController } from './module/users/users.controller';
       global: true,
       secret: process.env.SECRET_KEY!,
       signOptions: {
-        expiresIn: '1h',
         algorithm: 'HS512',
       },
       verifyOptions: {
