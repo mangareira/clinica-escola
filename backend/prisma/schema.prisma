@@ -26,3 +26,18 @@ model User {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
+
+enum PatientType {
+  Employee
+  External
+  Exempt
+}
+
+model Patient {
+  id        String      @id @default(uuid())
+  name      String
+  phone     String?
+  type      PatientType
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+}
