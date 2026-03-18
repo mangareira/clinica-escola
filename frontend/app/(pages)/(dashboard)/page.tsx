@@ -11,6 +11,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Calendar } from "lucide-react"
 import { CheckCircle, Hourglass, DollarSign, Eye, Edit, Trash2 } from "lucide-react"
 import { Summary } from "@/components/summary"
+import DataTable from "@/components/data-table"
 
 type Appointment = {
   id: string
@@ -67,7 +68,14 @@ export default function DashboardModern() {
       </header>
 
       {/* cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6 mb-8">
+        <Summary
+          title="Em espera"
+          description="Em espera da confimação do paciente"
+          icon={Calendar}
+          value={10}
+          className="from-gray-500 to-gray-400"
+        />
         <Summary
           title="Agendamentos hoje"
           description="Pacientes confirmados para o dia"
@@ -97,92 +105,28 @@ export default function DashboardModern() {
           className="from-violet-600 to-indigo-600"
         />
       </div>
-
-      {/* <Card>
-        <CardHeader className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-          <div>
-            <CardTitle className="text-lg">Agenda</CardTitle>
-            <p className="text-sm text-muted-foreground">Filtro rápido e lista de atendimentos</p>
-          </div>
-          <div className="flex gap-2 items-center">
-            <Input
-              placeholder="Buscar por nome..."
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
-              className="w-56"
-            />
-
-            <Select onValueChange={(v) => setStatusFilter(v)}>
-              <SelectTrigger className="w-44">
-                <SelectValue placeholder="Todos os Status" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">Todos os Status</SelectItem>
-                <SelectItem value="confirmed">Confirmado</SelectItem>
-                <SelectItem value="checkin">Check-in</SelectItem>
-                <SelectItem value="finished">Finalizado</SelectItem>
-              </SelectContent>
-            </Select>
-
-            <Button> Novo Agendamento </Button>
-          </div>
-        </CardHeader>
-        <CardContent className="p-0">
-          <div className="overflow-x-auto">
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Paciente</TableHead>
-                  <TableHead>Data & Hora</TableHead>
-                  <TableHead>Status</TableHead>
-                  <TableHead>Pagamento</TableHead>
-                  <TableHead>Ações</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {filtered.map((a) => (
-                  <TableRow key={a.id}>
-                    <TableCell>
-                      <div className="flex items-center gap-3">
-                        <Avatar>
-                          <AvatarImage src={"/placeholder.svg"} alt={a.name} />
-                          <AvatarFallback>{a.name.slice(0, 2).toUpperCase()}</AvatarFallback>
-                        </Avatar>
-                        <div>
-                          <div className="font-medium">{a.name}</div>
-                          <div className="text-sm text-muted-foreground">{a.specialty}</div>
-                        </div>
-                      </div>
-                    </TableCell>
-                    <TableCell>
-                      <div className="text-sm">{a.dateLabel} · {a.time}</div>
-                    </TableCell>
-                    <TableCell>
-                      {a.status === "finished" && <Badge variant="outline">Finalizado</Badge>}
-                      {a.status === "confirmed" && <Badge variant="secondary">Confirmado</Badge>}
-                      {a.status === "checkin" && <Badge>Check-in</Badge>}
-                    </TableCell>
-                    <TableCell>
-                      {a.paid ? <Badge>Pago</Badge> : <Badge variant="destructive">Pendente</Badge>}
-                    </TableCell>
-                    <TableCell>
-                      <div className="flex gap-2 items-center">
-                        <Button variant="ghost" size="icon" title="Visualizar">
-                          <Eye />
-                        </Button>
-                        <Button variant="ghost" size="icon" title="Editar">
-                          <Edit />
-                        </Button>
-                        <Button variant="ghost" size="icon" title="Excluir">
-                          <Trash2 />
-                        </Button>
-                      </div>
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </div>
+      {/* <Card className="border-none drop-shadow-sm">
+        <CardHeader className="gap-y-2 flex-row items-center justify-between">
+          <CardTitle className="text-xl line-clamp-1">Serviços</CardTitle> */}
+          {/* <Button size={'sm'} onClick={onOpen}>
+            <Plus className="size-4 mr-2" />
+            Adcionar
+          </Button> */}
+        {/* </CardHeader>
+        <CardContent>
+          <DataTable
+            columns={columns}
+            data={tableData}
+            disabled={isLoading}
+            filterkey="client"
+            placeholder="cliente"
+            onDelete={(row) => {
+              const ids = row.map((r) => r.original.id);
+              mutate(ids);
+            }}
+            title='Tem certeza ?'
+            text='Você esta prestes a deletar alguns agendamentos'
+          />
         </CardContent>
       </Card> */}
     </div>

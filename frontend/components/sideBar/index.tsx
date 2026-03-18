@@ -13,10 +13,6 @@ export function Sidebar({role} : {role: string}) {
   const pathname = usePathname();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-  console.log(role);
-  
-
-
   const filteredNavigation = navigation.filter(item => 
     !item.role || item.role.includes(role)
   );
