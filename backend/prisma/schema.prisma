@@ -65,3 +65,45 @@ model Service {
   createdAt   DateTime    @default(now())
   updatedAt   DateTime    @updatedAt
 }
+
+enum TransactionType {
+  Payment
+  Withdrawal
+  Adjustment
+}
+
+enum PaymentType {
+  Cash
+  Card
+  Pix
+}
+
+model cashTransaction {
+  id             String          @id @default(uuid())
+  type           TransactionType
+  paymentType    PaymentType
+  amount         Float
+  notes          String?
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
+  cashRegister   CashRegister?   @relation(fields: [cashRegisterId], references: [id])
+  cashRegisterId String?
+}
+
+enum CashRegisterStatus {
+  Open
+  Closed
+}
+
+model CashRegister {
+  id           String             @id @default(uuid())
+  openAt       DateTime           @default(now())
+  closeAt      DateTime?
+  openBalance  Float              @default(0)
+  closeBalance Float?
+  status       CashRegisterStatus @default(Open)
+  notes        String?
+  transactions cashTransaction[]
+  createdAt    DateTime           @default(now())
+  updatedAt    DateTime           @updatedAt
+}

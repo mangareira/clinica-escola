@@ -13,6 +13,10 @@ import { SpecialtyModule } from './module/specialty/specialty.module';
 import { DemandModule } from './module/demand/demand.module';
 import { SpecialtyController } from './module/specialty/specialty.controller';
 import { DemandController } from './module/demand/demand.controller';
+import { CashRegisterModule } from './module/cash-register/cash-register.module';
+import { CashTransactionModule } from './module/cash-transaction/cash-transaction.module';
+import { CashRegisterController } from './module/cash-register/cash-register.controller';
+import { CashTransactionController } from './module/cash-transaction/cash-transaction.controller';
 
 @Module({
   imports: [
@@ -22,6 +26,8 @@ import { DemandController } from './module/demand/demand.controller';
     ServiceModule,
     SpecialtyModule,
     DemandModule,
+    CashRegisterModule,
+    CashTransactionModule,
     JwtModule.register({
       global: true,
       secret: process.env.SECRET_KEY!,
@@ -37,7 +43,7 @@ import { DemandController } from './module/demand/demand.controller';
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer.apply(Middleware).forRoutes(UsersController, PatientController, ServiceController, SpecialtyController, DemandController, {
+    consumer.apply(Middleware).forRoutes(UsersController, PatientController, ServiceController, SpecialtyController, DemandController, CashRegisterController, CashTransactionController, {
       path: '/login/verify',  
       method: RequestMethod.GET,
     });
