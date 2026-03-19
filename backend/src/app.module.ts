@@ -6,13 +6,22 @@ import 'dotenv/config';
 import { Middleware } from './common/middleware/middleware.middleware';
 import { UsersController } from './module/users/users.controller';
 import { PatientModule } from './module/patient/patient.module';
+import { ServiceModule } from './module/service/service.module';
 import { PatientController } from './module/patient/patient.controller';
+import { ServiceController } from './module/service/service.controller';
+import { SpecialtyModule } from './module/specialty/specialty.module';
+import { DemandModule } from './module/demand/demand.module';
+import { SpecialtyController } from './module/specialty/specialty.controller';
+import { DemandController } from './module/demand/demand.controller';
 
 @Module({
   imports: [
     LoginModule,
     UsersModule,
     PatientModule,
+    ServiceModule,
+    SpecialtyModule,
+    DemandModule,
     JwtModule.register({
       global: true,
       secret: process.env.SECRET_KEY!,
@@ -28,8 +37,8 @@ import { PatientController } from './module/patient/patient.controller';
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer.apply(Middleware).forRoutes(UsersController, PatientController, {
-      path: '/login/verify',
+    consumer.apply(Middleware).forRoutes(UsersController, PatientController, ServiceController, SpecialtyController, DemandController, {
+      path: '/login/verify',  
       method: RequestMethod.GET,
     });
   }

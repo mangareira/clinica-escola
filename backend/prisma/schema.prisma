@@ -41,3 +41,27 @@ model Patient {
   createdAt DateTime    @default(now())
   updatedAt DateTime    @updatedAt
 }
+
+model Demand {
+  id          String     @id @default(uuid())
+  name        String
+  specialty   Specialty? @relation(fields: [specialtyId], references: [id])
+  specialtyId String?
+}
+
+model Specialty {
+  id        String   @id @default(uuid())
+  name      String
+  demands   Demand[]
+  service   Service? @relation(fields: [serviceId], references: [id])
+  serviceId String?
+}
+
+model Service {
+  id          String      @id @default(uuid())
+  type        String
+  price       Float
+  specialties Specialty[]
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+}
