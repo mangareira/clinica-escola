@@ -17,6 +17,12 @@ import { CashRegisterModule } from './module/cash-register/cash-register.module'
 import { CashTransactionModule } from './module/cash-transaction/cash-transaction.module';
 import { CashRegisterController } from './module/cash-register/cash-register.controller';
 import { CashTransactionController } from './module/cash-transaction/cash-transaction.controller';
+import { AppointmentModule } from './module/appointment/appointment.module';
+import { AppointmentSessionModule } from './module/appointment-session/appointment-session.module';
+import { AppointmentPaymentModule } from './module/appointment-payment/appointment-payment.module';
+import { AppointmentController } from './module/appointment/appointment.controller';
+import { AppointmentSessionController } from './module/appointment-session/appointment-session.controller';
+import { AppointmentPaymentController } from './module/appointment-payment/appointment-payment.controller';
 
 @Module({
   imports: [
@@ -28,6 +34,9 @@ import { CashTransactionController } from './module/cash-transaction/cash-transa
     DemandModule,
     CashRegisterModule,
     CashTransactionModule,
+    AppointmentModule,
+    AppointmentSessionModule,
+    AppointmentPaymentModule,
     JwtModule.register({
       global: true,
       secret: process.env.SECRET_KEY!,
@@ -43,7 +52,7 @@ import { CashTransactionController } from './module/cash-transaction/cash-transa
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer.apply(Middleware).forRoutes(UsersController, PatientController, ServiceController, SpecialtyController, DemandController, CashRegisterController, CashTransactionController, {
+    consumer.apply(Middleware).forRoutes(UsersController, PatientController, ServiceController, SpecialtyController, DemandController, CashRegisterController, CashTransactionController, AppointmentController, AppointmentSessionController, AppointmentPaymentController, {
       path: '/login/verify',  
       method: RequestMethod.GET,
     });

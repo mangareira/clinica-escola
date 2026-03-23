@@ -34,36 +34,40 @@ enum PatientType {
 }
 
 model Patient {
-  id        String      @id @default(uuid())
-  name      String
-  phone     String?
-  type      PatientType
-  createdAt DateTime    @default(now())
-  updatedAt DateTime    @updatedAt
+  id           String        @id @default(uuid())
+  name         String
+  phone        String?
+  type         PatientType
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  appointments Appointment[]
 }
 
 model Demand {
-  id          String     @id @default(uuid())
-  name        String
-  specialty   Specialty? @relation(fields: [specialtyId], references: [id])
-  specialtyId String?
+  id           String        @id @default(uuid())
+  name         String
+  specialty    Specialty?    @relation(fields: [specialtyId], references: [id])
+  specialtyId  String?
+  appointments Appointment[]
 }
 
 model Specialty {
-  id        String   @id @default(uuid())
-  name      String
-  demands   Demand[]
-  service   Service? @relation(fields: [serviceId], references: [id])
-  serviceId String?
+  id           String        @id @default(uuid())
+  name         String
+  demands      Demand[]
+  service      Service?      @relation(fields: [serviceId], references: [id])
+  serviceId    String?
+  appointments Appointment[]
 }
 
 model Service {
-  id          String      @id @default(uuid())
-  type        String
-  price       Float
-  specialties Specialty[]
-  createdAt   DateTime    @default(now())
-  updatedAt   DateTime    @updatedAt
+  id           String        @id @default(uuid())
+  type         String
+  price        Float
+  specialties  Specialty[]
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  appointments Appointment[]
 }
 
 enum TransactionType {
@@ -88,6 +92,8 @@ model cashTransaction {
   updatedAt      DateTime        @updatedAt
   cashRegister   CashRegister?   @relation(fields: [cashRegisterId], references: [id])
   cashRegisterId String?
+  appointment    Appointment?    @relation(fields: [appointmentId], references: [id])
+  appointmentId  String?
 }
 
 enum CashRegisterStatus {
@@ -106,4 +112,54 @@ model CashRegister {
   transactions cashTransaction[]
   createdAt    DateTime           @default(now())
   updatedAt    DateTime           @updatedAt
+}
+
+model AppointmentPayment {
+  id            String      @id @default(uuid())
+  paymentType   PaymentType
+  amount        Float
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+  appointment   Appointment @relation(fields: [appointmentId], references: [id])
+  appointmentId String
+}
+
+model AppointmentSession {
+  id            String      @id @default(uuid())
+  checkInTime   DateTime?
+  checkOutTime  DateTime?
+  appointment   Appointment @relation(fields: [appointmentId], references: [id])
+  appointmentId String
+}
+
+enum AppointmentStatus {
+  Waiting
+  Confirmed
+  CheckIn
+  Completed
+  Canceled
+}
+
+model Appointment {
+  id                       String               @id @default(uuid())
+  patientId                String?
+  serviceId                String
+  specialtyId              String?
+  demandId                 String?
+  dateTime                 DateTime
+  status                   AppointmentStatus
+  recurringDays            Json?
+  payments                 AppointmentPayment[]
+  checkInTime              DateTime?
+  checkOutTime             DateTime?
+  sessionHistory           AppointmentSession[]
+  patientTypeJustification String?
+  createdAt                DateTime             @default(now())
+  updatedAt                DateTime             @updatedAt
+  cashTransactions         cashTransaction[]
+
+  patient   Patient?   @relation(fields: [patientId], references: [id])
+  service   Service    @relation(fields: [serviceId], references: [id])
+  specialty Specialty? @relation(fields: [specialtyId], references: [id])
+  demand    Demand?    @relation(fields: [demandId], references: [id])
 }

@@ -20,8 +20,7 @@ export class CashRegisterController {
 
   @Post('/:id/close')
   @Roles('Admin')
-  @UsePipes(new ZodPipe(closeCashRegisterSchema))
-  async closeRegister(@Param('id') id: string, @Body() closeCashRegister: CloseCashRegisterDto): Promise<CashRegister> {
+  async closeRegister(@Param('id') id: string, @Body(new ZodPipe(closeCashRegisterSchema)) closeCashRegister: CloseCashRegisterDto): Promise<CashRegister> {
     return this.cashRegisterService.closeRegister(id, closeCashRegister);
   }
 

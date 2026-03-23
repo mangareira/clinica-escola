@@ -17,5 +17,6 @@ import { CashRegisterModule } from '../cash-register/cash-register.module';
       useClass: CashTransactionPrismaRepository,
     },
   ],
+  exports: [CashTransactionService],
 })
 export class CashTransactionModule {}
