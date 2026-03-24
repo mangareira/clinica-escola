@@ -15,6 +15,13 @@ export const createServiceSchema = z.object({
   price: z.coerce.number<number>().min(0, "O valor não pode ser negativo"),
 })
 
+export const updateServiceSchema = z.object({
+  id: z.string(),
+  type: z.string().min(1, "O tipo é obrigatório").optional(),
+  price: z.coerce.number<number>().min(0, "O valor não pode ser negativo").optional(),
+})
+
 export type CreateServiceFormValues = z.infer<typeof createServiceSchema>
+export type UpdateServiceFormValues = z.infer<typeof updateServiceSchema>
 
 export type Service = z.infer<typeof serviceSchema>;
