@@ -46,7 +46,7 @@ model Patient {
 model Demand {
   id           String        @id @default(uuid())
   name         String
-  specialty    Specialty?    @relation(fields: [specialtyId], references: [id])
+  specialty    Specialty?    @relation(fields: [specialtyId], references: [id], onDelete: Cascade)
   specialtyId  String?
   appointments Appointment[]
 }
@@ -55,7 +55,7 @@ model Specialty {
   id           String        @id @default(uuid())
   name         String
   demands      Demand[]
-  service      Service?      @relation(fields: [serviceId], references: [id])
+  service      Service?      @relation(fields: [serviceId], references: [id], onDelete: Cascade)
   serviceId    String?
   appointments Appointment[]
 }

@@ -1,6 +1,7 @@
 import { HttpException, HttpStatus, Injectable, Logger } from '@nestjs/common';
 import { IDemandRepository } from './repository/demand.repository';
 import { CreateDemandDto } from './dto/create-demand.dto';
+import { UpdateDemandDto } from './dto/update-demand.dto';
 import { Demand } from './entity/demand.entity';
 
 @Injectable()
@@ -24,5 +25,35 @@ export class DemandService {
 
   async findAll(): Promise<Demand[]> {
     return this.demandRepository.findAll();
+  }
+
+  async update(id: string, updateDemand: UpdateDemandDto): Promise<Demand> {
+    const demand = await this.demandRepository.findById(id);
+
+    if (!demand) {
+      throw new HttpException('Demanda não encontrada', HttpStatus.NOT_FOUND);
+    }
+
+    try {
+      return await this.demandRepository.update(id, updateDemand);
+    } catch (error) {
+      Logger.error(error);
+      throw new HttpException('Erro ao atualizar demanda. Verifique os dados e tente novamente.', HttpStatus.BAD_REQUEST);
+    }
+  }
+
+  async delete(id: string): Promise<void> {
+    const demand = await this.demandRepository.findById(id);
+
+    if (!demand) {
+      throw new HttpException('Demanda não encontrada', HttpStatus.NOT_FOUND);
+    }
+
+    try {
+      await this.demandRepository.delete(id);
+    } catch (error) {
+      Logger.error(error);
+      throw new HttpException('Erro ao deletar demanda.', HttpStatus.INTERNAL_SERVER_ERROR);
+    }
   }
 }

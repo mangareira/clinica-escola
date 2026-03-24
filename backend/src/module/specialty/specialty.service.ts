@@ -1,6 +1,7 @@
 import { HttpException, HttpStatus, Injectable, Logger } from '@nestjs/common';
 import { ISpecialtyRepository } from './repository/specialty.repository';
 import { CreateSpecialtyDto } from './dto/create-specialty.dto';
+import { UpdateSpecialtyDto } from './dto/update-specialty.dto';
 import { Specialty } from './entity/specialty.entity';
 
 @Injectable()
@@ -24,5 +25,25 @@ export class SpecialtyService {
 
   async findAll(): Promise<Specialty[]> {
     return this.specialtyRepository.findAll();
+  }
+
+  async update(id: string, updateSpecialty: UpdateSpecialtyDto): Promise<Specialty> {
+    const specialty = await this.specialtyRepository.findById(id);
+
+    if (!specialty) {
+      throw new HttpException('Especialidade não encontrada', HttpStatus.NOT_FOUND);
+    }
+
+    return this.specialtyRepository.update(id, updateSpecialty);
+  }
+
+  async delete(id: string): Promise<void> {
+    const specialty = await this.specialtyRepository.findById(id);
+
+    if (!specialty) {
+      throw new HttpException('Especialidade não encontrada', HttpStatus.NOT_FOUND);
+    }
+
+    await this.specialtyRepository.delete(id);
   }
 }
