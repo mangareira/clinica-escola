@@ -14,7 +14,7 @@ export const Services = () => {
       {services?.map((service, i) => (
         <Card
           key={i}
-          className="group transition-all hover:shadow-xl hover:-translate-y-1 border-muted/60"
+          className="group transition-all hover:shadow-lg hover:-translate-y-0.5 border-muted/60"
         >
           <CardHeader className="flex flex-row items-start justify-between">
             <div>

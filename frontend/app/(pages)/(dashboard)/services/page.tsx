@@ -1,6 +1,5 @@
-import { Button } from "@/components/ui/button"
-import { Plus } from "lucide-react"
-import { Services } from "@/components/services/servicesDemand"
+import { CreateServiceModal } from "@/components/services/createServiceModal"
+import { Services } from "@/components/services"
 
 
 export default function ServicesPage() {
@@ -16,10 +15,7 @@ export default function ServicesPage() {
           </p>
         </div>
 
-        <Button className="gap-2">
-          <Plus size={16} />
-          Novo Serviço
-        </Button>
+        <CreateServiceModal />
       </div>
 
       <Services />
