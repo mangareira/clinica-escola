@@ -1,4 +1,4 @@
-import { Controller, Post, Body, UseGuards, UsePipes } from '@nestjs/common';
+import { Controller, Post, Body, UseGuards, UsePipes, Get } from '@nestjs/common';
 import { PatientService } from './patient.service';
 import { CreatePatientDto, createPatientSchema } from './dto/create-patient.dto';
 import { RolesGuard } from 'src/common/guard/roles/roles.guard';
@@ -11,9 +11,15 @@ export class PatientController {
   constructor(private readonly patientService: PatientService) {}
 
   @Post('/create')
-  @Roles('Admin')
+  @Roles('Admin', 'User')
   @UsePipes(new ZodPipe(createPatientSchema))
   create(@Body() createPatientDto: CreatePatientDto) {
     return this.patientService.create(createPatientDto);
+  }
+
+  @Get('/get-all')
+  @Roles('Admin', 'User')
+  findAll() {
+    return this.patientService.findAll();
   }
 }

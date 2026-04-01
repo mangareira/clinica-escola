@@ -42,4 +42,19 @@ export class AppointmentService {
   async updateCheckInOut(id: string, checkInTime?: Date | null, checkOutTime?: Date | null): Promise<Appointment> {
     return this.appointmentRepository.updateCheckInOut(id, checkInTime, checkOutTime);
   }
+
+  async delete(id: string): Promise<Appointment> {
+    const appointment = await this.appointmentRepository.findById(id);
+
+    if (!appointment) {
+      throw new HttpException('Agendamento não encontrado', HttpStatus.NOT_FOUND);
+    }
+
+    try {
+      return await this.appointmentRepository.delete(id);
+    } catch (error) {
+      Logger.error(error);
+      throw new HttpException('Erro ao deletar agendamento.', HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+  }
 }

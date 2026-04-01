@@ -7,4 +7,5 @@ export abstract class IAppointmentRepository {
   abstract findById(id: string): Promise<Appointment | null>;
   abstract updateStatus(id: string, status: UpdateAppointmentStatusDto['status']): Promise<Appointment>;
   abstract updateCheckInOut(id: string, checkInTime?: Date | null, checkOutTime?: Date | null): Promise<Appointment>;
+  abstract delete(id: string): Promise<Appointment>;
 }

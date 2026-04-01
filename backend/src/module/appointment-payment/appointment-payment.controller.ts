@@ -9,13 +9,12 @@ import { Roles } from 'src/common/decorators/roles/roles.decorator';
 @Controller('appointment-payments')
 @UseGuards(RolesGuard)
 export class AppointmentPaymentController {
-  constructor(private readonly paymentService: AppointmentPaymentService) {}
+  constructor(private readonly paymentService: AppointmentPaymentService) { }
 
   @Post('/:appointmentId/pay')
   @Roles('Admin', 'User')
-  @UsePipes(new ZodPipe(appointmentPaymentParamSchema))
   async pay(
-    @Param() params: AppointmentPaymentParamDto,
+    @Param(new ZodPipe(appointmentPaymentParamSchema)) params: AppointmentPaymentParamDto,
     @Body(new ZodPipe(createAppointmentPaymentSchema)) createPayment: CreateAppointmentPaymentDto,
   ): Promise<AppointmentPayment> {
     return this.paymentService.create(createPayment, params.appointmentId);

@@ -19,4 +19,21 @@ export class PatientPrismaRepository implements IPatientRepository {
       },
     });
   }
+
+  async findAll(): Promise<Patient[]> {
+    return this.prisma.patient.findMany({
+      include: {
+        appointments: {
+            include: {
+                service: true,
+                specialty: true,
+                demand: true,
+                sessionHistory: true,
+                payments: true,
+                cashTransactions: true,
+            }
+        },
+      },
+    });
+  }
 }

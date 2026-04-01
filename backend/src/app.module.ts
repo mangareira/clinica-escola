@@ -52,7 +52,17 @@ import { AppointmentPaymentController } from './module/appointment-payment/appoi
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer.apply(Middleware).forRoutes(UsersController, PatientController, ServiceController, SpecialtyController, DemandController, CashRegisterController, CashTransactionController, AppointmentController, AppointmentSessionController, AppointmentPaymentController, {
+    consumer.apply(Middleware).forRoutes(
+      UsersController, 
+      PatientController, 
+      ServiceController, 
+      SpecialtyController, 
+      DemandController, 
+      CashRegisterController, 
+      CashTransactionController, 
+      AppointmentController, 
+      AppointmentSessionController, 
+      AppointmentPaymentController, {
       path: '/login/verify',  
       method: RequestMethod.GET,
     });

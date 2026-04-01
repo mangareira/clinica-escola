@@ -1,3 +1,5 @@
+import { Appointment } from "src/module/appointment/entity/appointment.entity";
+
 export type PatientType = 'Employee' | 'External' | 'Exempt';
 
 export class Patient {
@@ -7,4 +9,5 @@ export class Patient {
   type: PatientType;
   createdAt: Date;
   updatedAt: Date;
+  appointments?: Appointment[];
 }

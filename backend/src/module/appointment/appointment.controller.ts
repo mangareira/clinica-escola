@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post, Put, UseGuards, UsePipes } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Put, UseGuards, UsePipes } from '@nestjs/common';
 import { AppointmentService } from './appointment.service';
 import { CreateAppointmentDto, createAppointmentSchema, UpdateAppointmentStatusDto, updateAppointmentStatusSchema } from './dto/create-appointment.dto';
 import { Appointment } from './entity/appointment.entity';
@@ -31,5 +31,11 @@ export class AppointmentController {
     @Body(new ZodPipe(updateAppointmentStatusSchema)) statusDto: UpdateAppointmentStatusDto,
   ): Promise<Appointment> {
     return this.appointmentService.updateStatus(id, statusDto);
+  }
+
+  @Delete('/:id')
+  @Roles('Admin', 'User')
+  async delete(@Param('id') id: string): Promise<Appointment> {
+    return this.appointmentService.delete(id);
   }
 }

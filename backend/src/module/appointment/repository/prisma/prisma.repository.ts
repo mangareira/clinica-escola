@@ -3,7 +3,6 @@ import { PrismaService } from 'src/prisma/prisma.service';
 import { IAppointmentRepository } from '../appointment.repository';
 import { CreateAppointmentDto, UpdateAppointmentStatusDto } from '../../dto/create-appointment.dto';
 import { Appointment } from '../../entity/appointment.entity';
-import { AppointmentSession } from 'src/module/appointment-session/entity/appointment-session.entity';
 
 @Injectable()
 export class AppointmentPrismaRepository implements IAppointmentRepository {
@@ -12,6 +11,14 @@ export class AppointmentPrismaRepository implements IAppointmentRepository {
   async create(createAppointment: CreateAppointmentDto): Promise<Appointment> {
     const appointment = await this.prisma.appointment.create({
       data: createAppointment,
+      include: {
+        sessionHistory: true,
+        payments: true,
+        cashTransactions: true,
+        service: true,
+        specialty: true,
+        demand: true,
+      }
     });
     return appointment;
   }
@@ -23,6 +30,9 @@ export class AppointmentPrismaRepository implements IAppointmentRepository {
         service: true,
         specialty: true,
         demand: true,
+        sessionHistory: true,
+        payments: true,
+        cashTransactions: true,
       },
     });
     return appointments;
@@ -31,6 +41,14 @@ export class AppointmentPrismaRepository implements IAppointmentRepository {
   async findById(id: string): Promise<Appointment | null> {
     const appointment = await this.prisma.appointment.findUnique({
       where: { id },
+      include: {
+        sessionHistory: true,
+        payments: true,
+        cashTransactions: true,
+        service: true,
+        specialty: true,
+        demand: true,
+      },
     });
     return appointment;
   }
@@ -39,6 +57,14 @@ export class AppointmentPrismaRepository implements IAppointmentRepository {
     const appointment = await this.prisma.appointment.update({
       where: { id },
       data: { status },
+      include: {
+        sessionHistory: true,
+        payments: true,
+        cashTransactions: true,
+        service: true,
+        specialty: true,
+        demand: true,
+      },
     });
     return appointment;
   }
@@ -51,6 +77,29 @@ export class AppointmentPrismaRepository implements IAppointmentRepository {
     const appointment = await this.prisma.appointment.update({
       where: { id },
       data: updateData,
+      include: {
+        sessionHistory: true,
+        payments: true,
+        cashTransactions: true,
+        service: true,
+        specialty: true,
+        demand: true,
+      },
+    });
+    return appointment;
+  }
+
+  async delete(id: string): Promise<Appointment> {
+    const appointment = await this.prisma.appointment.delete({
+      where: { id },
+      include: {
+        sessionHistory: true,
+        payments: true,
+        cashTransactions: true,
+        service: true,
+        specialty: true,
+        demand: true,
+      },
     });
     return appointment;
   }
