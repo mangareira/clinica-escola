@@ -23,6 +23,7 @@ export interface AppointmentSession {
 export interface AppointmentPayment {
   id: string;
   paymentType: string;
+  payemntsStatus: "Pending" | "Confirmed" | "Canceled"
   amount: number;
 }
 

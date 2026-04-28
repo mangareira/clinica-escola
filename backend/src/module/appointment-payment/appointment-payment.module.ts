@@ -19,5 +19,6 @@ import { CashTransactionModule } from '../cash-transaction/cash-transaction.modu
       useClass: AppointmentPaymentPrismaRepository,
     },
   ],
+  exports: [AppointmentPaymentService],
 })
 export class AppointmentPaymentModule {}

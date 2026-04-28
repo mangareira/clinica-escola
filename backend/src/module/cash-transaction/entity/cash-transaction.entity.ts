@@ -7,4 +7,5 @@ export class CashTransaction {
   createdAt: Date;
   updatedAt: Date;
   cashRegisterId: string | null;
+  appointmentId: string | null;
 }

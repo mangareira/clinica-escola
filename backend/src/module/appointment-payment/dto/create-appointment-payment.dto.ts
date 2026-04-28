@@ -3,6 +3,7 @@ import { z } from 'zod';
 export const createAppointmentPaymentSchema = z.object({
   paymentType: z.enum(['Cash', 'Card', 'Pix']),
   amount: z.coerce.number().min(0.01, 'O valor deve ser maior que zero'),
+  payemntsStatus: z.enum(['Pending', 'Confirmed', 'Canceled']).optional().default('Pending'),
 });
 
 export type CreateAppointmentPaymentDto = z.infer<typeof createAppointmentPaymentSchema>;

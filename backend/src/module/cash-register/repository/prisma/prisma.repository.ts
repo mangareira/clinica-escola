@@ -10,7 +10,7 @@ export class CashRegisterPrismaRepository implements ICashRegisterRepository {
 
   async create(createCashRegister: CreateCashRegisterDto): Promise<CashRegister> {
     const cashRegister = await this.prisma.cashRegister.create({
-      data: createCashRegister
+      data: createCashRegister,
     });
     return cashRegister;
   }
@@ -18,6 +18,7 @@ export class CashRegisterPrismaRepository implements ICashRegisterRepository {
   async findOpenRegister(): Promise<CashRegister | null> {
     const cashRegister = await this.prisma.cashRegister.findFirst({
       where: { status: 'Open' },
+      include: { transactions: true },
     });
     return cashRegister;
   }

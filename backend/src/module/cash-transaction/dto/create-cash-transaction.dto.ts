@@ -5,6 +5,7 @@ export const createCashTransactionSchema = z.object({
   paymentType: z.enum(['Cash', 'Card', 'Pix']),
   amount: z.coerce.number().min(0.01, 'O valor deve ser maior que zero'),
   notes: z.string().optional().nullable(),
+  appointmentId: z.string().uuid().optional().nullable(),
 });
 
 export type CreateCashTransactionDto = z.infer<typeof createCashTransactionSchema>;

@@ -18,7 +18,7 @@ export class AppointmentPrismaRepository implements IAppointmentRepository {
         service: true,
         specialty: true,
         demand: true,
-      }
+      },
     });
     return appointment;
   }
@@ -53,7 +53,10 @@ export class AppointmentPrismaRepository implements IAppointmentRepository {
     return appointment;
   }
 
-  async updateStatus(id: string, status: UpdateAppointmentStatusDto['status']): Promise<Appointment> {
+  async updateStatus(
+    id: string,
+    status: UpdateAppointmentStatusDto['status'],
+  ): Promise<Appointment> {
     const appointment = await this.prisma.appointment.update({
       where: { id },
       data: { status },
@@ -69,11 +72,15 @@ export class AppointmentPrismaRepository implements IAppointmentRepository {
     return appointment;
   }
 
-  async updateCheckInOut(id: string, checkInTime?: Date | null, checkOutTime?: Date | null): Promise<Appointment> {
+  async updateCheckInOut(
+    id: string,
+    checkInTime?: Date | null,
+    checkOutTime?: Date | null,
+  ): Promise<Appointment> {
     const updateData: any = {};
     if (checkInTime !== undefined) updateData.checkInTime = checkInTime;
     if (checkOutTime !== undefined) updateData.checkOutTime = checkOutTime;
-    
+
     const appointment = await this.prisma.appointment.update({
       where: { id },
       data: updateData,

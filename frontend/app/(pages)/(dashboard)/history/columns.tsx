@@ -8,22 +8,9 @@ import { ptBR } from 'date-fns/locale';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Badge } from '@/components/ui/badge';
-// import { Actions } from './actions'; // Ajuste o caminho conforme necessário
 import { Appointment } from '@/utils/interfaces/history-type.interface'; // Ajuste o caminho
-import { convertAmountFromMiliunitis, formatCurrency } from '@/lib/utils';
+import { formatCurrency } from '@/lib/utils';
 import { Actions } from './actions';
-
-// Funções auxiliares (se não estiverem disponíveis globalmente)
-// import { formatCurrency, convertAmountFromMiliunitis } from '@/lib/utils';
-
-// Mapeamento de cores para os status
-const statusVariant = {
-  Waiting: 'warning',
-  Confirmed: 'info',
-  CheckIn: 'secondary',
-  Completed: 'success',
-  Canceled: 'destructive',
-} as const;
 
 export const columns: ColumnDef<Appointment>[] = [
   {

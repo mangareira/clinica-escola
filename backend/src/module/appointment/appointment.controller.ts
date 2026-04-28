@@ -1,6 +1,21 @@
-import { Body, Controller, Delete, Get, Param, Post, Put, UseGuards, UsePipes } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Put,
+  UseGuards,
+  UsePipes,
+} from '@nestjs/common';
 import { AppointmentService } from './appointment.service';
-import { CreateAppointmentDto, createAppointmentSchema, UpdateAppointmentStatusDto, updateAppointmentStatusSchema } from './dto/create-appointment.dto';
+import {
+  CreateAppointmentDto,
+  createAppointmentSchema,
+  UpdateAppointmentStatusDto,
+  updateAppointmentStatusSchema,
+} from './dto/create-appointment.dto';
 import { Appointment } from './entity/appointment.entity';
 import { ZodPipe } from 'src/common/pipes/zod/zod.pipe';
 import { RolesGuard } from 'src/common/guard/roles/roles.guard';

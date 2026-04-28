@@ -1,6 +1,8 @@
 import { Service } from "@/utils/schemas/service.schemas";
 import { EditServiceFormValues } from "@/utils/schemas/specialty.schemas";
 import { clsx, type ClassValue } from "clsx"
+import { format, getDay, isBefore, isThisWeek, isToday, startOfDay } from "date-fns";
+import { ptBR } from "date-fns/locale";
 import { twMerge } from "tailwind-merge"
 
 export function cn(...inputs: ClassValue[]) {
@@ -57,3 +59,67 @@ export const formatPhone = (phone: string | undefined | null) => {
   
   return phone;
 }
+
+export const formatDateTime = (date: string | Date): string => {
+  const appointmentDate = new Date(date);
+
+  if (isThisWeek(appointmentDate)) {
+    return format(appointmentDate, "EEEE: HH:mm", { locale: ptBR });
+  } else {
+    return format(appointmentDate, "dd/MM/yyyy, HH:mm", { locale: ptBR });
+  }
+};
+
+export const getDayOfWeek = (date: Date): number => {
+  return getDay(new Date(date));
+};
+
+export const isWeekday = (appointmentDate: Date): boolean => {
+  const dayOfWeek = getDayOfWeek(appointmentDate);
+  return dayOfWeek >= 1 && dayOfWeek <= 5;
+};
+
+export const getDayNamePt = (dayOfWeek: number): string => {
+  const days = ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'];
+  return days[dayOfWeek];
+};
+
+export const validateCheckInEligibility = (appointmentDate: Date): { canCheckIn: boolean; reason?: string } => {
+  const appointmentDateObj = new Date(appointmentDate);
+  const today = new Date();
+  
+  if (isBefore(startOfDay(appointmentDateObj), startOfDay(today))) {
+    return {
+      canCheckIn: false,
+      reason: 'Agendamento já passou'
+    };
+  }
+
+  if (!isWeekday(appointmentDateObj)) {
+    const dayName = getDayNamePt(getDayOfWeek(appointmentDateObj));
+    return {
+      canCheckIn: false,
+      reason: `Agendamento marcado para ${dayName}. Sessões são apenas de segunda a sexta.`
+    };
+  }
+
+
+  if (!isToday(appointmentDateObj)) {
+    const dayName = getDayNamePt(getDayOfWeek(appointmentDateObj));
+    return {
+      canCheckIn: false,
+      reason: `Agendamento marcado para ${dayName}. Check-in disponível apenas no dia do agendamento.`
+    };
+  }
+
+  return { canCheckIn: true };
+};
+
+export const formatAppointmentWithDayName = (appointmentDate: Date): string => {
+  const dayOfWeek = getDayOfWeek(new Date(appointmentDate));
+  const dayName = getDayNamePt(dayOfWeek);
+  const date = new Date(appointmentDate);
+  const formattedDate = date.toLocaleDateString('pt-BR');
+  
+  return `${dayName} (${formattedDate})`;
+};

@@ -82,6 +82,12 @@ enum PaymentType {
   Pix
 }
 
+enum PaymentStatus {
+  Pending
+  Confirmed
+  Canceled
+}
+
 model cashTransaction {
   id             String          @id @default(uuid())
   type           TransactionType
@@ -115,13 +121,14 @@ model CashRegister {
 }
 
 model AppointmentPayment {
-  id            String      @id @default(uuid())
-  paymentType   PaymentType
-  amount        Float
-  createdAt     DateTime    @default(now())
-  updatedAt     DateTime    @updatedAt
-  appointment   Appointment @relation(fields: [appointmentId], references: [id], onDelete: Cascade)
-  appointmentId String
+  id             String         @id @default(uuid())
+  paymentType    PaymentType
+  payemntsStatus PaymentStatus?
+  amount         Float
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+  appointment    Appointment    @relation(fields: [appointmentId], references: [id], onDelete: Cascade)
+  appointmentId  String
 }
 
 model AppointmentSession {
@@ -148,7 +155,6 @@ model Appointment {
   demandId                 String?
   dateTime                 DateTime
   status                   AppointmentStatus
-  recurringDays            Json?
   payments                 AppointmentPayment[]
   checkInTime              DateTime?
   checkOutTime             DateTime?

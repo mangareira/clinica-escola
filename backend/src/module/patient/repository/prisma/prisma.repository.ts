@@ -24,14 +24,14 @@ export class PatientPrismaRepository implements IPatientRepository {
     return this.prisma.patient.findMany({
       include: {
         appointments: {
-            include: {
-                service: true,
-                specialty: true,
-                demand: true,
-                sessionHistory: true,
-                payments: true,
-                cashTransactions: true,
-            }
+          include: {
+            service: true,
+            specialty: true,
+            demand: true,
+            sessionHistory: true,
+            payments: true,
+            cashTransactions: true,
+          },
         },
       },
     });

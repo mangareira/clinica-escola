@@ -5,9 +5,10 @@ import { IAppointmentSessionRepository } from './repository/appointment-session.
 import { AppointmentSessionPrismaRepository } from './repository/prisma/prisma.repository';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { AppointmentModule } from '../appointment/appointment.module';
+import { AppointmentPaymentModule } from '../appointment-payment/appointment-payment.module';
 
 @Module({
-  imports: [AppointmentModule],
+  imports: [AppointmentModule, AppointmentPaymentModule],
   controllers: [AppointmentSessionController],
   providers: [
     AppointmentSessionService,
